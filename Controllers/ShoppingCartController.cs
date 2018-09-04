@@ -13,21 +13,19 @@ namespace StoreApi.Controllers
     [ApiController]
     public class ShoppingCartController : ControllerBase
     {
-        private readonly IShoppingCartFileModelReader _cartReader;
-        private static ShoppingCart shoppingCart;
-        public ShoppingCartController(IShoppingCartFileModelReader reader) => _cartReader = reader;
+        private readonly IShoppingCartModelOperator _cartReader;
+        public ShoppingCartController(IShoppingCartModelOperator reader) => _cartReader = reader;
 
         [HttpGet]
         public async Task<ActionResult<ShoppingCart>> Get() 
         {
-            if (shoppingCart is null)
-                shoppingCart = await _cartReader.GetShoppingCart();
-            return shoppingCart;
+            return await _cartReader.GetShoppingCart();
         }
 
         [HttpPut]
         public ActionResult Put([FromBody]Item item) 
         {
+            var shoppingCart = _cartReader.GetShoppingCart();
             if (item == null)
             {
                 throw new ArgumentNullException(nameof(item));
