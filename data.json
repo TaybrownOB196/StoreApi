@@ -1,0 +1,11 @@
+{
+    "Id":90210,
+    "User":{
+        "Id":1337,
+        "Name":"Timmy Turner"
+    },
+    "Items":[
+        { "Id":1, "SerialNumber":149243524, "Name":"ItemOne", "Description":"First Item", "Price":0.99 },
+        { "Id":2, "SerialNumber":562355233, "Name":"ItemTwo", "Description":"Second Item", "Price":8.99 }
+    ]
+}
