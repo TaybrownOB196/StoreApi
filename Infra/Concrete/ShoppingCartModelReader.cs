@@ -7,26 +7,57 @@ namespace StoreApi.Infra
     public class ShoppingCartModelOperator : IShoppingCartModelOperator
     {
         private static ShoppingCart _shoppingCart;
-        private DataFileModelReader<ShoppingCart> _shoppingCartReader;
-        private DataFileModelWriter<ShoppingCart> _shoppingCartWriter;
-        public ShoppingCartModelOperator()
-        {
-
-        }
+        
+        public ShoppingCartModelOperator() { }
 
         public async Task<ShoppingCart> GetShoppingCart()
         {
             if (_shoppingCart is null)
-                _shoppingCart = await _shoppingCartReader.RetrieveObject();
+            {
+                _shoppingCart = await new ShoppingCartModelReader().RetrieveObject();
+            }
+
             return _shoppingCart;
         }
 
         public Task SaveShoppingCart() 
         {
-            if (_shoppingCart is null)
+            if (_shoppingCart is null) 
+            {
                 throw new InvalidOperationException("Shopping cart in invalid state");
-            _shoppingCartWriter.WriteObject(_shoppingCart).ConfigureAwait(false);
+            }
+
+            new ShoppingCartModelWriter().WriteObject(_shoppingCart).ConfigureAwait(false);
             return Task.CompletedTask;
         }
+
+        public Task AddItemToCart(Item item) 
+        {
+            if (_shoppingCart is null) 
+            {
+                throw new InvalidOperationException("Shopping cart in invalid state");
+            }
+
+            if (item == null)
+            {
+                throw new ArgumentNullException("Item in invalid state, unable to add to cart");
+            }
+
+            _shoppingCart.Items.Add(item);
+
+            return Task.CompletedTask;
+        }
+    }
+
+    class ShoppingCartModelReader : DataFileModelReader<ShoppingCart>
+    {
+        public ShoppingCartModelReader() 
+            : base("data.json", false) { }
+    }
+
+    class ShoppingCartModelWriter : DataFileModelWriter<ShoppingCart>
+    {
+        public ShoppingCartModelWriter() 
+            : base("data.json") { }
     }
 }

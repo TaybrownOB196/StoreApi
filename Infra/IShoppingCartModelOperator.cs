@@ -3,8 +3,10 @@ using StoreApi.Models;
 
 namespace StoreApi.Infra
 {
-    public interface IShoppingCartFileModelReader
+    public interface IShoppingCartModelOperator
     {
         Task<ShoppingCart> GetShoppingCart();
+        Task SaveShoppingCart();
+        Task AddItemToCart(Item item);
     }
 }
