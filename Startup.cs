@@ -27,7 +27,7 @@ namespace StoreApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddScoped<IShoppingCartFileModelReader, ShoppingCartFileModelReader>();
+            services.AddScoped<IShoppingCartModelOperator, ShoppingCartModelOperator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
