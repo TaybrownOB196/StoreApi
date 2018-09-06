@@ -14,7 +14,7 @@ namespace StoreApi.Models
         }
 
         public long Id { get; set; }
-        public long SerialNumer { get; protected set; }
+        public long SerialNumber { get; protected set; }
         public string Name { get; protected set; }
         public string Description { get; protected set; }
         public decimal Price { get; protected set; }
