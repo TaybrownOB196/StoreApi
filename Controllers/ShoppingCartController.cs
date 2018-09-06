@@ -13,38 +13,27 @@ namespace StoreApi.Controllers
     [ApiController]
     public class ShoppingCartController : ControllerBase
     {
-        private readonly IShoppingCartModelOperator _cartReader;
-        public ShoppingCartController(IShoppingCartModelOperator reader) => _cartReader = reader;
+        private readonly IShoppingCartModelOperator _cartOperator;
+        public ShoppingCartController(IShoppingCartModelOperator cartOperator) => _cartOperator = cartOperator;
 
         [HttpGet]
         public async Task<ActionResult<ShoppingCart>> Get() 
         {
-            return await _cartReader.GetShoppingCart();
+            return await _cartOperator.GetShoppingCart();
+        }
+
+        [HttpPost]
+        public ActionResult Post([FromBody]Item item) 
+        {
+            _cartOperator.SaveShoppingCart().ConfigureAwait(false);
+
+            return new OkResult();
         }
 
         [HttpPut]
         public ActionResult Put([FromBody]Item item) 
         {
-            var shoppingCart = _cartReader.GetShoppingCart();
-            if (item == null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
-
-            shoppingCart.Items.Add(item);
-
-            return new OkResult();
-        }
-
-        [HttpDelete("{id}")]
-        public ActionResult Delete([FromBody]Item item) 
-        {
-            if (item == null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
-
-            shoppingCart.Items.Remove(item);
+            _cartOperator.AddItemToCart(item).ConfigureAwait(false);
 
             return new OkResult();
         }
