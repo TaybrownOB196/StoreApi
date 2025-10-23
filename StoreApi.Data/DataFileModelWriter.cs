@@ -1,9 +1,7 @@
-using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using System.Text.Json;
 
-namespace StoreApi.Infra
+namespace StoreApi.Data
 {
     public abstract class DataFileModelWriter<T> : IWriteObjects<T> where T : new()
     {
@@ -13,18 +11,13 @@ namespace StoreApi.Infra
             _fileName = fileName;   
         }
 
-        protected string SerializeObject(T obj) 
-        {
-            return JsonSerializer.Serialize(obj);
-        }
-
         public async Task WriteObject(T obj)
         {
-            var json = SerializeObject(obj);
-            var encode = new UnicodeEncoding();
-            byte[] byteArray = encode.GetBytes(json);
+            string json = JsonSerializer.Serialize(obj);
+            Console.WriteLine(json);
             using var writer = new StreamWriter(_fileName);
-            await writer.BaseStream.WriteAsync(byteArray, 0, byteArray.Length);
+            Console.WriteLine(writer.Encoding);
+            await writer.WriteAsync(json);
         }
     }
 }

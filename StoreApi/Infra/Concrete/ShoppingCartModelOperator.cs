@@ -1,5 +1,5 @@
-using System.Threading.Tasks;
-using StoreApi.Models;
+using StoreApi.Data;
+using StoreApi.Data.Models;
 
 namespace StoreApi.Infra 
 {
@@ -25,17 +25,5 @@ namespace StoreApi.Infra
         {
             await _writer.WriteObject(shoppingCart);
         }
-    }
-
-    class ShoppingCartModelReader : DataFileModelReader<ShoppingCart>
-    {
-        public ShoppingCartModelReader() 
-            : base("data.json") { }
-    }
-
-    class ShoppingCartModelWriter : DataFileModelWriter<ShoppingCart>
-    {
-        public ShoppingCartModelWriter() 
-            : base("data.json") { }
     }
 }

@@ -2,6 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+using StoreApi.Data;
+
 namespace StoreApi
 {
     public class Program
@@ -11,6 +13,7 @@ namespace StoreApi
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllers();
+            builder.Services.RegisterDataAccess();
             builder.Services.RegisterServices();
 
             var app = builder.Build();

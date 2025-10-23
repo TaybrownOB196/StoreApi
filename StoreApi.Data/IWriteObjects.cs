@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace StoreApi.Infra
+namespace StoreApi.Data
 {
     public interface IWriteObjects<T> where T : new()
     {

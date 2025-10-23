@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace StoreApi.Models 
+namespace StoreApi.Data.Models 
 {
     public class ShoppingCart 
     {

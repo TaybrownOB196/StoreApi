@@ -1,9 +1,6 @@
-using System;
-using System.IO;
-using System.Threading.Tasks;
 using System.Text.Json;
 
-namespace StoreApi.Infra
+namespace StoreApi.Data
 {
     public abstract class DataFileModelReader<T> : IReadObjects<T> where T : new()
     {
@@ -26,6 +23,20 @@ namespace StoreApi.Infra
             return await reader.ReadToEndAsync();
         }
 
-        private T ParseFile(string fileString) => JsonSerializer.Deserialize<T>(fileString);
+        private T ParseFile(string fileString)
+        {
+            T toReturn = new T();
+            try
+            {
+                toReturn = JsonSerializer.Deserialize<T>(fileString);
+            }
+            catch (JsonException ex)
+            {
+                Console.WriteLine(fileString);
+                Console.WriteLine(ex.Message);
+            }
+
+            return toReturn;
+        }
     }
 }

@@ -1,7 +1,6 @@
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using StoreApi.Infra;
-using StoreApi.Models;
+using StoreApi.Data.Models;
 
 namespace StoreApi.Controllers
 {

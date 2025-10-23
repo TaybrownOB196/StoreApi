@@ -1,5 +1,4 @@
-using System.Threading.Tasks;
-using StoreApi.Models;
+using StoreApi.Data.Models;
 
 namespace StoreApi.Infra
 {
