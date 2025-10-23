@@ -1,9 +1,7 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace StoreApi.Infra
 {
@@ -17,18 +15,16 @@ namespace StoreApi.Infra
 
         protected string SerializeObject(T obj) 
         {
-            return JsonConvert.SerializeObject(obj);
+            return JsonSerializer.Serialize(obj);
         }
 
         public async Task WriteObject(T obj)
         {
             var json = SerializeObject(obj);
-            UnicodeEncoding encode = new UnicodeEncoding();
+            var encode = new UnicodeEncoding();
             byte[] byteArray = encode.GetBytes(json);
-            using (var sr = new StreamReader(_fileName))     
-            {
-                await sr.BaseStream.WriteAsync(byteArray, 0, byteArray.Length);
-            }
+            using var writer = new StreamWriter(_fileName);
+            await writer.BaseStream.WriteAsync(byteArray, 0, byteArray.Length);
         }
     }
 }

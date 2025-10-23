@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using StoreApi.Models;
 
@@ -6,53 +5,32 @@ namespace StoreApi.Infra
 {
     public class ShoppingCartModelOperator : IShoppingCartModelOperator
     {
-        private static ShoppingCart _shoppingCart;
-        
-        public ShoppingCartModelOperator() { }
+        private readonly IReadObjects<ShoppingCart> _reader;
+        private readonly IWriteObjects<ShoppingCart> _writer;
+
+        public ShoppingCartModelOperator(
+            IReadObjects<ShoppingCart> reader,
+            IWriteObjects<ShoppingCart> writer)
+        {
+            _reader = reader;
+            _writer = writer;
+        }
 
         public async Task<ShoppingCart> GetShoppingCart()
         {
-            if (_shoppingCart is null)
-            {
-                _shoppingCart = await new ShoppingCartModelReader().RetrieveObject();
-            }
-
-            return _shoppingCart;
+            return await _reader.RetrieveObject();
         }
 
-        public Task SaveShoppingCart() 
+        public async Task SaveShoppingCart(ShoppingCart shoppingCart) 
         {
-            if (_shoppingCart is null) 
-            {
-                throw new InvalidOperationException("Shopping cart in invalid state");
-            }
-
-            new ShoppingCartModelWriter().WriteObject(_shoppingCart).ConfigureAwait(false);
-            return Task.CompletedTask;
-        }
-
-        public Task AddItemToCart(Item item) 
-        {
-            if (_shoppingCart is null) 
-            {
-                throw new InvalidOperationException("Shopping cart in invalid state");
-            }
-
-            if (item == null)
-            {
-                throw new ArgumentNullException("Item in invalid state, unable to add to cart");
-            }
-
-            _shoppingCart.Items.Add(item);
-
-            return Task.CompletedTask;
+            await _writer.WriteObject(shoppingCart);
         }
     }
 
     class ShoppingCartModelReader : DataFileModelReader<ShoppingCart>
     {
         public ShoppingCartModelReader() 
-            : base("data.json", false) { }
+            : base("data.json") { }
     }
 
     class ShoppingCartModelWriter : DataFileModelWriter<ShoppingCart>

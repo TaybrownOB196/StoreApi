@@ -1,5 +1,3 @@
-using System;
-
 namespace StoreApi.Models 
 {
     public class User 

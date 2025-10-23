@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using StoreApi.Infra;
 using StoreApi.Models;
 
@@ -17,23 +13,17 @@ namespace StoreApi.Controllers
         public ShoppingCartController(IShoppingCartModelOperator cartOperator) => _cartOperator = cartOperator;
 
         [HttpGet]
+        [Route(nameof(Get))]
         public async Task<ActionResult<ShoppingCart>> Get() 
         {
             return await _cartOperator.GetShoppingCart();
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody]Item item) 
+        [Route(nameof(Save))]
+        public async Task<ActionResult> Save(ShoppingCart shoppingCart) 
         {
-            _cartOperator.SaveShoppingCart().ConfigureAwait(false);
-
-            return new OkResult();
-        }
-
-        [HttpPut]
-        public ActionResult Put([FromBody]Item item) 
-        {
-            _cartOperator.AddItemToCart(item).ConfigureAwait(false);
+            await _cartOperator.SaveShoppingCart(shoppingCart);
 
             return new OkResult();
         }
